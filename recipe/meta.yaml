@@ -1,46 +1,55 @@
 {% set name = "dbf" %}
-{% set version = "0.99.1" %}
-{% set sha256 = "4ed598a3866dfe7761b8099cf53ab44cb6ed5e4a7dbffb0da8c67a4af8d62fc5" %}
+{% set version = "0.99.10" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 5002bb7a579a5302d3db63738efe3e9d2532ea54a6f630176d3526416ffe00a2
 
 build:
   number: 0
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
-    - python =2.7|>=3.5
+    - python
     - pip
+    - wheel
+    - setuptools
   run:
-    - python =2.7|>=3.5
+    - python
     - aenum
 
 test:
   imports:
     - dbf
+  commands:
+    - pip check
+    # Run only tests which not try to create a tempdir.
+    # Tests with tempdir need to generate a temptable.
+    # No example of how to generate it in the upstream.
+    - pytest -v ${SP_DIR}/dbf/test.py::TestChar ${SP_DIR}/dbf/test.py::TestDateTime ${SP_DIR}/dbf/test.py::TestDateTime ${SP_DIR}/dbf/test.py::TestLogical ${SP_DIR}/dbf/test.py::TestQuantum  # [unix]
+    - pytest -v %SP_DIR%/dbf/test.py::TestChar %SP_DIR%/dbf/test.py::TestDateTime %SP_DIR%/dbf/test.py::TestDateTime %SP_DIR%/dbf/test.py::TestLogical %SP_DIR%/dbf/test.py::TestQuantum  # [win]
+  requires:
+    - pip
+    - pytest
+    - pytz
 
 about:
-  home: https://pypi.python.org/pypi/dbf
+  home: https://github.com/ethanfurman/dbf
   license: BSD-3-Clause
   license_family: BSD
   license_file: dbf/LICENSE
   summary: Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files (including memos)
-
   description: |
     Dbf is a pure Python package for reading/writing dBase, FoxPro, and
     Visual FoxPro .dbf files. Currently supports dBase III, Clipper, FoxPro,
     and Visual FoxPro tables. Text is returned as unicode, and codepage settings
     in tables are honored.
-  doc_url: http://pythonhosted.org/dbf/
+  doc_url: https://github.com/ethanfurman/dbf/blob/master/dbf/README.md
   dev_url: https://github.com/ethanfurman/dbf
 
 extra:
