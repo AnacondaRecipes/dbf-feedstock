@@ -49,7 +49,7 @@ about:
     Visual FoxPro .dbf files. Currently supports dBase III, Clipper, FoxPro,
     and Visual FoxPro tables. Text is returned as unicode, and codepage settings
     in tables are honored.
-  doc_url: https://github.com/ethanfurman/dbf/blob/master/dbf/README.md
+  doc_url: https://github.com/ethanfurman/dbf/blob/master/README.md
   dev_url: https://github.com/ethanfurman/dbf
 
 extra:
